@@ -45,5 +45,5 @@ sudo ninja -C build install
 ## Run
 
 ```bash
-vanilla-installer
+dako-installer
 ```

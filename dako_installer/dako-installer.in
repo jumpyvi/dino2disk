@@ -1,6 +1,6 @@
 #!@PYTHON@
 
-# vanilla-installer-processor.in
+# dako-installer.in
 #
 # Copyright 2024 mirkobrombin
 #
@@ -18,15 +18,11 @@
 
 import os
 import sys
+import time
 import signal
 import locale
 import gettext
-import argparse
-import logging
-
-
-logging.basicConfig(level=logging.INFO)
-
+import subprocess
 
 VERSION = '@VERSION@'
 pkgdatadir = '@pkgdatadir@'
@@ -38,16 +34,33 @@ locale.bindtextdomain('dako_installer', localedir)
 locale.textdomain('dako_installer')
 gettext.install('dako_installer', localedir)
 
-
 if __name__ == '__main__':
-    from dako_installer.utils.configurator import Configurator
-    from dako_installer.core.config import Config
+    import gi
+        
+    from gi.repository import Gio
+    resource = Gio.Resource.load(os.path.join(pkgdatadir, 'dako-installer.gresource'))
+    resource._register()
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        'config', help='The configuration string (e.g. snap::True|flatpak::False|apport::True)')
-    args = parser.parse_args()
+    from dako_installer import main
 
-    config = Config.from_str(args.config)
-    print(config.get_str())
-    Configurator(config).apply()
+    '''
+    Since gtk_window_set_position in GTK4 is deprecated
+    we achieve this by hacking the mutter gschemas at
+    org.gnome.mutter center-new-windows.
+    Ref: https://discourse.gnome.org/t/how-to-center-gtkwindows-in-gtk4/3112/4
+    '''
+
+    settings = Gio.Settings.new('org.gnome.mutter')
+
+    if settings.get_boolean('center-new-windows') == False:
+
+        settings.set_boolean('center-new-windows', True)
+
+        def restore_mutter_settings():
+            time.sleep(3)
+            settings.set_boolean('center-new-windows', False)
+
+        from dako_installer.utils.run_async import RunAsync
+
+        RunAsync(restore_mutter_settings, None)
+    sys.exit(main.main(VERSION))

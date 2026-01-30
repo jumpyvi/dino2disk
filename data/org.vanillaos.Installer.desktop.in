@@ -1,6 +1,6 @@
 [Desktop Entry]
-Name=Vanilla OS Installer
-Exec=vanilla-installer
+Name=Dako Stall Installer
+Exec=dako-installer
 Icon=org.vanillaos.Installer
 Terminal=false
 Type=Application

@@ -35,5 +35,5 @@ class VanillaCpuWindow(Adw.Window):
         self.btn_continue.connect("clicked", self.__continue)
 
     def __continue(self, btn):
-        subprocess.Popen("IGNORE_RAM=1 IGNORE_CPU=1 vanilla-installer", shell=True)
+        subprocess.Popen("IGNORE_RAM=1 IGNORE_CPU=1 dako-installer", shell=True)
         sys.exit(0)

@@ -6,7 +6,7 @@
       <object class="AdwPreferencesGroup" id="open_gparted_group">
         <child>
           <object class="AdwActionRow" id="open_gparted_row">
-            <property name="icon-name">vanilla-installer-harddisk-symbolic</property>
+            <property name="icon-name">dako-installer-harddisk-symbolic</property>
             <property name="title" translatable="yes">Manually Partition</property>
             <property name="subtitle" translatable="yes">Open GParted to manually partition the disk</property>
             <child type="suffix">

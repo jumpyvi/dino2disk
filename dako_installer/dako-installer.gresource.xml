@@ -49,8 +49,8 @@
   </gresource>
   <gresource prefix="/org/vanillaos/Installer/icons/scalable/actions/">
     <file preprocess="xml-stripblanks">../data/icons/hicolor/symbolic/actions/background-app-ghost-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">../data/icons/hicolor/symbolic/actions/vanilla-installer-harddisk-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">../data/icons/hicolor/symbolic/actions/vanilla-installer-display-with-window-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">../data/icons/hicolor/symbolic/actions/dako-installer-harddisk-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">../data/icons/hicolor/symbolic/actions/dako-installer-display-with-window-symbolic.svg</file>
     <file preprocess="xml-stripblanks">../data/icons/hicolor/symbolic/actions/vanilla-logo-text-symbolic.svg</file>
   </gresource>
 </gresources>

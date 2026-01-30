@@ -2,8 +2,8 @@ pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.proje
 moduledir = join_paths(pkgdatadir, 'dako_installer')
 gnome = import('gnome')
 
-gnome.compile_resources('vanilla-installer',
-  'vanilla-installer.gresource.xml',
+gnome.compile_resources('dako-installer',
+  'dako-installer.gresource.xml',
   gresource_bundle: true,
   install: true,
   install_dir: pkgdatadir,
@@ -18,8 +18,8 @@ conf.set('localedir', join_paths(get_option('prefix'), get_option('localedir')))
 conf.set('pkgdatadir', pkgdatadir)
 
 configure_file(
-  input: 'vanilla-installer.in',
-  output: 'vanilla-installer',
+  input: 'dako-installer.in',
+  output: 'dako-installer',
   configuration: conf,
   install: true,
   install_dir: get_option('bindir'),
@@ -27,8 +27,8 @@ configure_file(
 )
 
 configure_file(
-  input: 'vanilla-installer-processor.in',
-  output: 'vanilla-installer-processor',
+  input: 'dako-installer-processor.in',
+  output: 'dako-installer-processor',
   configuration: conf,
   install: true,
   install_dir: get_option('bindir'),

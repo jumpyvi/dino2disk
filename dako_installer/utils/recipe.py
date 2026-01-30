@@ -24,7 +24,7 @@ logger = logging.getLogger("Installer::RecipeLoader")
 
 
 class RecipeLoader:
-    recipe_path = "/etc/vanilla-installer/recipe.json"
+    recipe_path = "/etc/dako-installer/recipe.json"
 
     def __init__(self):
         self.__recipe = {}
