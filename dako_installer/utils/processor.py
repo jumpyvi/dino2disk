@@ -318,7 +318,7 @@ class Processor:
                     log_command_output(f"OPERATION: cryptsetup-format")
                     log_command_output(f"Command: {' '.join(cmd)}")
                     
-                    password_input = f"{password}\n{password}\n".encode() if password else b""
+                    password_input = f"{password}\n{password}\n" if password else ""
                     result = subprocess.run(cmd, input=password_input, check=True, capture_output=True, text=True)
                     log_command_output(f"Return code: {result.returncode}")
                     if result.stdout:
@@ -332,7 +332,7 @@ class Processor:
                     log_command_output(f"OPERATION: cryptsetup-open")
                     log_command_output(f"Command: {' '.join(cmd)}")
                     
-                    password_input = f"{password}\n".encode() if password else b""
+                    password_input = f"{password}\n" if password else ""
                     result = subprocess.run(cmd, input=password_input, check=True, capture_output=True, text=True)
                     log_command_output(f"Return code: {result.returncode}")
                     if result.stdout:
