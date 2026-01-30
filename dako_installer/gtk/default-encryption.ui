@@ -46,7 +46,7 @@
                     </child>
                     <child>
                       <object class="AdwPasswordEntryRow" id="encryption_pass_entry">
-                        <property name="title" translatable="yes">Password</property>
+                        <property name="title" translatable="yes">Password (min. 8 characters)</property>
                         <property name="sensitive" bind-source="use_encryption_switch" bind-property="active" bind-flags="sync-create"/>
                       </object>
                     </child>

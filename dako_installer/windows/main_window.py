@@ -134,15 +134,18 @@ class VanillaWindow(Adw.ApplicationWindow):
 
     def on_installation_confirmed(self, *args):
         # Set callback to move to next page when disk operations complete
-        Processor.set_completion_callback(self.next)
+        Processor.set_completion_callback(self.__go_to_done_page)
         
         recipe = Processor.gen_install_recipe(
             self.recipe.get("log_file", "/tmp/dako.log"),
             self.finals,
             self.recipe,
         )
-        self.next()
         self.__view_progress.start(recipe)
+        self.next()
+
+    def __go_to_done_page(self, *args):
+        self.carousel.scroll_to(self.__view_done, True)
 
     def next(self, widget=None, fn=None, *args):
         logger.info("Going to next page")
@@ -186,4 +189,3 @@ class VanillaWindow(Adw.ApplicationWindow):
 
     def set_installation_result(self, result, terminal):
         self.__view_done.set_result(result, terminal)
-        self.next()

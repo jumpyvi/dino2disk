@@ -30,6 +30,7 @@ class VanillaDefaultEncryption(Adw.Bin):
     encryption_pass_entry_confirm = Gtk.Template.Child()
 
     password_filled = False
+    password_too_short = True
 
     def __init__(self, window, distro_info, key, step, **kwargs):
         super().__init__(**kwargs)
@@ -38,10 +39,12 @@ class VanillaDefaultEncryption(Adw.Bin):
         self.__key = key
         self.__step = step
         self.delta = False
+        self.password_filled = False
+        self.password_too_short = True
 
         self.btn_next.connect("clicked", self.__window.next)
         self.use_encryption_switch.connect(
-            "state-set", self.__on_encryption_switch_set)
+            "notify::active", self.__on_encryption_switch_set)
         self.encryption_pass_entry.connect(
             "changed", self.__on_password_changed)
         self.encryption_pass_entry_confirm.connect(
@@ -58,28 +61,42 @@ class VanillaDefaultEncryption(Adw.Bin):
             }
         }
 
-    def __on_encryption_switch_set(self, state, user_data):
+    def __on_encryption_switch_set(self, *args):
         if self.use_encryption_switch.get_active():
             self.status_page.set_icon_name("changes-prevent-symbolic")
         else:
             self.status_page.set_icon_name("changes-allow-symbolic")
 
-        self.__update_btn_next()
+        self.__on_password_changed()
 
     def __on_password_changed(self, *args):
         password = self.encryption_pass_entry.get_text()
-        if (
-            password == self.encryption_pass_entry_confirm.get_text()
-            and password.strip()
-        ):
+        confirm_password = self.encryption_pass_entry_confirm.get_text()
+
+        if not self.use_encryption_switch.get_active():
             self.password_filled = True
-            self.encryption_pass_entry_confirm.remove_css_class("error")
+            self.password_too_short = False
         else:
-            self.password_filled = False
-            self.encryption_pass_entry_confirm.add_css_class("error")
+            self.password_too_short = len(password) < 8
+            
+            if self.password_too_short:
+                if len(password) > 0:
+                    self.encryption_pass_entry.add_css_class("error")
+                    self.encryption_pass_entry_confirm.add_css_class("error")
+            else:
+                self.encryption_pass_entry.remove_css_class("error")
+                self.encryption_pass_entry_confirm.remove_css_class("error")
+
+            if password == confirm_password and password != "" and not self.password_too_short:
+                self.password_filled = True
+                self.encryption_pass_entry_confirm.remove_css_class("error")
+            else:
+                self.password_filled = False
+                if len(confirm_password) > 0:
+                    self.encryption_pass_entry_confirm.add_css_class("error")
 
         self.__update_btn_next()
 
     def __update_btn_next(self):
-        rule = self.password_filled or self.use_encryption_switch.get_active() is False
+        rule = (self.password_filled and not self.password_too_short) or (self.use_encryption_switch.get_active() is False)
         self.btn_next.set_sensitive(rule)
