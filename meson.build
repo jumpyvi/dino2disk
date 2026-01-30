@@ -11,7 +11,7 @@ i18n = import('i18n')
 gnome = import('gnome')
 
 subdir('data')
-subdir('vanilla_installer')
+subdir('dako_installer')
 subdir('po')
 
 gnome.post_install(
