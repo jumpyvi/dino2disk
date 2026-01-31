@@ -38,7 +38,7 @@ class VanillaDefaultImage(Adw.Bin):
             "changed", self.__on_url_changed
         )
 
-        self.image_url_filled = False
+        self.__on_url_changed()
 
     def get_finals(self):
         if self.__window.install_mode == 1:

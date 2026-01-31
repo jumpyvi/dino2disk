@@ -25,9 +25,9 @@
         </child>
         <child>
           <object class="AdwStatusPage" id="status_page">
-            <property name="icon-name">image-missing-symbolic</property>
-            <property name="title" translatable="yes">Custom Image</property>
-            <property name="description" translatable="yes">Enter the URL of the custom image below. Note that custom images have full access to your system. Only install images from authors you trust.</property>
+            <property name="icon-name">media-floppy-symbolic</property>
+            <property name="title" translatable="yes">Image</property>
+            <property name="description" translatable="yes">Enter the URL of the image below.</property>
             <child>
               <object class="AdwPreferencesPage">
                 <child>
@@ -35,7 +35,7 @@
                     <child>
                       <object class="AdwEntryRow" id="image_url_entry">
                         <property name="title" translatable="yes">URL</property>
-                        <property name="text" translatable="yes">ghcr.io/vanilla-os/desktop:main</property>
+                        <property name="text" translatable="yes">ghcr.io/projectbluefin/dakota:latest</property>
                       </object>
                     </child>
                   </object>

@@ -157,7 +157,7 @@ class Processor:
         logger.info("processing the following final data: %s", finals)
 
         recipe = BootcRecipe()
-        image = "ghcr.io/projectbluefin/dakota"
+        # image = "ghcr.io/projectbluefin/dakota" # Removed hardcoded image
 
         # Setup encryption if user selected it
         encrypt = False
@@ -166,6 +166,13 @@ class Processor:
             if "encryption" in final.keys():
                 encrypt = final["encryption"]["use_encryption"]
                 password = final["encryption"]["encryption_key"] if encrypt else None
+            if "custom_image" in final.keys(): # Extract custom_image from finals
+                recipe.image = final["custom_image"]
+                logger.info("Using custom image: %s", recipe.image)
+            elif "default-image" in final.keys():
+                recipe.image = "ghcr.io/projectbluefin/dakota:latest"
+                logger.info("Using default image: %s", recipe.image)
+
 
         # Get disk selection and partition configuration
         for final in finals:
@@ -192,7 +199,7 @@ class Processor:
                 logger.info("Starting disk partitioning and formatting on %s", disk)
                 thread = threading.Thread(
                     target=Processor.__execute_disk_operations,
-                    args=(setup_steps, encrypt, password, boot_part, root_part),
+                    args=(setup_steps, encrypt, password, boot_part, root_part, recipe.image),
                     daemon=True
                 )
                 thread.start()
@@ -200,7 +207,7 @@ class Processor:
         return recipe
 
     @staticmethod
-    def __execute_disk_operations(setup_steps, encrypt, password, boot_partition, root_partition):
+    def __execute_disk_operations(setup_steps, encrypt, password, boot_partition, root_partition, image):
         """Execute disk operations using subprocess in background"""
         uuids = {}
         success = True
@@ -381,7 +388,6 @@ class Processor:
                 elif operation == "bootc-install":
                     mount_point, root_name = params
                     log_command_output(f"OPERATION: bootc-install")
-                    image = "ghcr.io/projectbluefin/dakota"
                     
                     cmd = [
                         "sudo", "podman", "run",

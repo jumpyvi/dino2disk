@@ -58,8 +58,8 @@ class VanillaDefaultWelcome(Adw.Bin):
         VanillaPoweroffDialog(self.__window).show()
 
     def __install(self, _):
-        if self.__window.install_mode == 1:
-            self.__window.rebuild_ui(0)
+        if self.__window.install_mode == 0:
+            self.__window.rebuild_ui(1)
         self.__window.next()
 
     def __install_custom(self, _):

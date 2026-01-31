@@ -62,6 +62,10 @@ hardcoded_recipe = {
             "template": "welcome",
             "protected": True
         },
+        "image": {
+            "template": "image",
+            "custom_image": True
+        },
         "disk": {
             "template": "disk"
         },
@@ -82,6 +86,7 @@ templates = {
     "preferences": VanillaLayoutPreferences,
     "disk": VanillaDefaultDisk,
     "encryption": VanillaDefaultEncryption,
+    "image": VanillaDefaultImage,
     "yes-no": VanillaLayoutYesNo,
 }
 
