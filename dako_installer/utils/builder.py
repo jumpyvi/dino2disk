@@ -115,7 +115,8 @@ class Builder:
                 logger.warning(_("failed to create log file: %s") % log_path)
                 logging.warning(_("No log will be stored."))
         
-        for key, step in self.recipe["steps"].items():
+        for i, (key, step) in enumerate(self.recipe["steps"].items()):
+            step["num"] = i
             if step["template"] not in templates:
                 logger.error(_("Unknown template: %s") % step["template"])
                 sys.exit(1)
