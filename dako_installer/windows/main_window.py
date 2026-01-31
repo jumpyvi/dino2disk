@@ -234,6 +234,7 @@ class VanillaWindow(Adw.ApplicationWindow):
         about.add_credit_section("Artists", [
             "Delphic Melody",
             "Quince",
+            "Artists from the Gnome website"
         ])
         about.add_acknowledgement_section(
             ("Installer forked from:"),

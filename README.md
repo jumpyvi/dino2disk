@@ -47,3 +47,8 @@ sudo ninja -C build install
 ```bash
 dako-installer
 ```
+
+# Special thanks
+
+- The carousel art is made by Gnome website's contributor, licensed under `CCBYSA 4.0`. https://www.gnome.org/
+- This project forks [Vanilla-Installer](https://github.com/Vanilla-OS/vanilla-installer) using mainly its UI component

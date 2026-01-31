@@ -137,6 +137,9 @@ class Processor:
         
         setup_steps.append([disk, "configure-fstab", [mount_point, boot_partition, encrypt]])
 
+        # Configure boot entries
+        setup_steps.append([disk, "configure-boot-entries", [mount_point, boot_partition, encrypt]])
+
         # Sync and cleanup
         setup_steps.append([disk, "sync-unmount", [mount_point, encrypt]])
 
@@ -145,6 +148,14 @@ class Processor:
         mountpoints.append([boot_partition, "/boot/efi"])
 
         return setup_steps, mountpoints, boot_partition, root_partition
+    
+    
+    @staticmethod
+    def _keep_sudo_alive(stop_event):
+        """Periodically runs sudo -v to keep the timestamp from expiring"""
+        while not stop_event.is_set():
+            subprocess.run(["sudo", "-v"], check=False)
+            stop_event.wait(60)
 
     @staticmethod
     def gen_install_recipe(log_path, finals, sys_recipe):
@@ -205,6 +216,14 @@ class Processor:
         """Execute disk operations using subprocess in background"""
         uuids = {}
         success = True
+
+        stop_sudo_keepalive = threading.Event()
+        keepalive_thread = threading.Thread(
+            target=Processor._keep_sudo_alive, 
+            args=(stop_sudo_keepalive,), 
+            daemon=True
+        )
+        keepalive_thread.start()
         
         # Initialize log file
         log_command_output("=" * 80)
@@ -215,12 +234,18 @@ class Processor:
             disk, operation, params = step[0], step[1], step[2]
             
             try:
-                if operation == "cleanup":
+                if operation == "remount-rw":
+                    mount_point = params[0]
+                    logger.info("Remounting %s as writable", mount_point)
+                    log_command_output(f"OPERATION: remount-rw")
+                    cmd = ["sudo", "mount", "-o", "remount,rw", mount_point]
+                    result = subprocess.run(cmd, check=True, capture_output=True, text=True)
+                
+                elif operation == "cleanup":
                     mount_point = params[0]
                     logger.info("Cleaning up previous state at %s", mount_point)
                     log_command_output(f"OPERATION: cleanup at {mount_point}")
                     
-                    # Unmount specific partitions first
                     for part in [boot_partition, root_partition]:
                         result = subprocess.run(["sudo", "umount", part], 
                                      check=False, capture_output=True, text=True)
@@ -396,29 +421,25 @@ class Processor:
                         "--bootloader", "systemd",
                         "--karg", "splash",
                         "--karg", "quiet",
-                        "--karg", f"rd.luks.name={uuids.get('LUKS_UUID', 'unknown')}=cryptroot",
-                        "--karg", "root=/dev/mapper/cryptroot",
                         "--karg", "rootflags=subvol=/",
                         "--karg", "rw"
                     ]
+                    
+                    # Add root kernel parameters if needed
+                    if encrypt:
+                        cmd.extend([
+                            "--karg", f"rd.luks.name={uuids.get('LUKS_UUID', 'unknown')}=cryptroot",
+                            "--karg", "root=/dev/mapper/cryptroot"
+                        ])
+                    else:
+                        cmd.extend([
+                            "--karg", f"root={root_partition}"
+                        ])
+                    
                     logger.info("Running bootc install to-filesystem")
                     log_command_output(f"Command: {' '.join(cmd)}")
                     
                     result = subprocess.run(cmd, check=True, capture_output=True, text=True)
-                    log_command_output(f"Return code: {result.returncode}")
-                    if result.stdout:
-                        log_command_output(f"Stdout: {result.stdout}")
-                    if result.stderr:
-                        log_command_output(f"Stderr: {result.stderr}")
-                    
-                elif operation == "remount-rw":
-                    mount_point = params[0]
-                    logger.info("Remounting %s as writable", mount_point)
-                    log_command_output(f"OPERATION: remount-rw")
-                    
-                    cmd1 = ["sudo", "mount", "-o", "remount,rw", mount_point]
-                    log_command_output(f"Command: {' '.join(cmd1)}")
-                    result = subprocess.run(cmd1, check=True, capture_output=True, text=True)
                     log_command_output(f"Return code: {result.returncode}")
                     if result.stdout:
                         log_command_output(f"Stdout: {result.stdout}")
@@ -460,9 +481,9 @@ class Processor:
                         log_command_output(f"Creating crypttab at {deploy_dir}/etc/crypttab")
                         log_command_output(f"Content: {crypttab_content}")
                         
-                        cmd = ["sudo", "bash", "-c", f"echo '{crypttab_content}' | sudo tee {deploy_dir}/etc/crypttab"]
+                        cmd = ["sudo", "tee", f"{deploy_dir}/etc/crypttab"]
                         log_command_output(f"Command: {' '.join(cmd)}")
-                        result = subprocess.run(cmd, check=True, capture_output=True, text=True)
+                        result = subprocess.run(cmd, input=crypttab_content, check=True, capture_output=True, text=True)
                         log_command_output(f"Return code: {result.returncode}")
                         if result.stdout:
                             log_command_output(f"Stdout: {result.stdout}")
@@ -493,16 +514,22 @@ class Processor:
                             continue
                         deploy_dir = deploy_dirs[0]
                         
-                        fstab_content = "/dev/mapper/cryptroot  /      btrfs  defaults  0 0\nUUID={BOOT_UUID}      /boot  vfat   defaults  0 2".format(
-                            BOOT_UUID=uuids.get("BOOT_UUID", "unknown")
-                        )
+                        if encrypt:
+                            fstab_content = "/dev/mapper/cryptroot  /      btrfs  defaults  0 0\nUUID={BOOT_UUID}      /boot  vfat   defaults  0 2".format(
+                                BOOT_UUID=uuids.get("BOOT_UUID", "unknown")
+                            )
+                        else:
+                            fstab_content = "{ROOT_UUID}  /      btrfs  defaults  0 0\nUUID={BOOT_UUID}      /boot  vfat   defaults  0 2".format(
+                                ROOT_UUID=root_partition,
+                                BOOT_UUID=uuids.get("BOOT_UUID", "unknown")
+                            )
                         logger.info("Creating fstab at %s/etc/fstab", deploy_dir)
                         log_command_output(f"Creating fstab at {deploy_dir}/etc/fstab")
                         log_command_output(f"Content: {fstab_content}")
                         
-                        cmd = ["sudo", "bash", "-c", f"echo -e '{fstab_content}' | sudo tee {deploy_dir}/etc/fstab"]
+                        cmd = ["sudo", "tee", f"{deploy_dir}/etc/fstab"]
                         log_command_output(f"Command: {' '.join(cmd)}")
-                        result = subprocess.run(cmd, check=True, capture_output=True, text=True)
+                        result = subprocess.run(cmd, input=fstab_content, check=True, capture_output=True, text=True)
                         log_command_output(f"Return code: {result.returncode}")
                         if result.stdout:
                             log_command_output(f"Stdout: {result.stdout}")
@@ -511,51 +538,109 @@ class Processor:
                     except Exception as e:
                         logger.warning("Failed to configure fstab: %s", e)
                         log_command_output(f"ERROR: Failed to configure fstab: {e}")
-                    
-                elif operation == "sync-unmount":
-                    mount_point, encrypt = params
-                    logger.info("Syncing and unmounting")
-                    log_command_output(f"OPERATION: sync-unmount")
-                    
-                    cmd1 = ["sudo", "sync"]
-                    log_command_output(f"Command: {' '.join(cmd1)}")
-                    result = subprocess.run(cmd1, check=True, capture_output=True, text=True)
-                    log_command_output(f"Return code: {result.returncode}")
-                    if result.stdout:
-                        log_command_output(f"Stdout: {result.stdout}")
-                    if result.stderr:
-                        log_command_output(f"Stderr: {result.stderr}")
-                    
-                    cmd2 = ["sudo", "umount", "-R", mount_point]
-                    log_command_output(f"Command: {' '.join(cmd2)}")
-                    result = subprocess.run(cmd2, check=True, capture_output=True, text=True)
-                    log_command_output(f"Return code: {result.returncode}")
-                    if result.stdout:
-                        log_command_output(f"Stdout: {result.stdout}")
-                    if result.stderr:
-                        log_command_output(f"Stderr: {result.stderr}")
-                    
-                    if encrypt:
-                        cmd3 = ["sudo", "cryptsetup", "close", "cryptroot"]
-                        log_command_output(f"Command: {' '.join(cmd3)}")
-                        result = subprocess.run(cmd3, check=True, capture_output=True, text=True)
+
+                elif operation == "configure-boot-entries":
+                    mount_point, boot_partition, encrypt = params
+                    log_command_output(f"OPERATION: configure-boot-entries")
+
+                    try:
+                        # Find the deploy directory
+                        cmd = ["sudo", "find", f"{mount_point}/state/deploy", "-maxdepth", "1", "-type", "d"]
+                        log_command_output(f"Command: {' '.join(cmd)}")
+                        result = subprocess.run(cmd, capture_output=True, text=True, check=False)
                         log_command_output(f"Return code: {result.returncode}")
                         if result.stdout:
                             log_command_output(f"Stdout: {result.stdout}")
                         if result.stderr:
                             log_command_output(f"Stderr: {result.stderr}")
                         
-            except subprocess.CalledProcessError as e:
-                error_msg = f"Command failed: {e.cmd}\nReturn code: {e.returncode}"
-                if e.stdout:
-                    error_msg += f"\nStdout: {e.stdout if isinstance(e.stdout, str) else e.stdout.decode()}"
-                if e.stderr:
-                    error_msg += f"\nStderr: {e.stderr if isinstance(e.stderr, str) else e.stderr.decode()}"
-                logger.error(error_msg)
-                log_command_output(f"ERROR: {error_msg}")
-                success = False
-                break
-                
+                        deploy_dirs = [d for d in result.stdout.strip().split('\n') if d and d != f"{mount_point}/state/deploy"]
+                        if not deploy_dirs:
+                            logger.warning("No deploy directory found, skipping boot entries")
+                            log_command_output("WARNING: No deploy directory found, skipping boot entries")
+                            continue
+                        deploy_dir = deploy_dirs[0]
+                        
+                        # Get composefs hash from deploy directory basename
+                        composefs_hash = os.path.basename(deploy_dir)
+                        logger.info("Using composefs hash: %s", composefs_hash)
+                        log_command_output(f"Using composefs hash: {composefs_hash}")
+                        
+                        # Get root filesystem UUID for non-encrypted installations
+                        root_uuid = None
+                        if not encrypt:
+                            # Get the actual root filesystem UUID (not LUKS UUID)
+                            cmd = ["sudo", "blkid", "-s", "UUID", "-o", "value", root_partition]
+                            log_command_output(f"Command: {' '.join(cmd)}")
+                            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+                            root_uuid = result.stdout.strip()
+                            logger.info("Root filesystem UUID: %s", root_uuid)
+                            log_command_output(f"Root filesystem UUID: {root_uuid}")
+                        
+                        # Find the single boot entry file (there will always be only one)
+                        boot_entries_dir = f"{mount_point}/boot/efi/loader/entries"
+                        boot_entry = f"{boot_entries_dir}/bootc_bluefin_dakota-latest-1.conf"
+                        
+                        if not os.path.exists(boot_entry):
+                            logger.warning("Boot entry file not found at expected location: %s", boot_entry)
+                            log_command_output(f"WARNING: Boot entry file not found at expected location: {boot_entry}")
+                            continue
+                        
+                        logger.info("Modifying boot entry: %s", boot_entry)
+                        log_command_output(f"Modifying boot entry: {boot_entry}")
+                        
+                        # Read the current boot entry
+                        cmd = ["sudo", "cat", boot_entry]
+                        log_command_output(f"Command: {' '.join(cmd)}")
+                        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+                        log_command_output(f"Return code: {result.returncode}")
+                        if result.stdout:
+                            log_command_output(f"Current content:\n{result.stdout}")
+                        if result.stderr:
+                            log_command_output(f"Stderr: {result.stderr}")
+                        
+                        # Modify the options line
+                        lines = result.stdout.strip().split('\n')
+                        modified_lines = []
+                        for line in lines:
+                            if line.startswith('options '):
+                                # Build the new options line
+                                if encrypt:
+                                    new_options = (
+                                        f"options rd.luks.name={uuids.get('LUKS_UUID', 'unknown')}=cryptroot "
+                                        f"rd.luks.uuid=luks-{uuids.get('LUKS_UUID', 'unknown')} "
+                                        f"root=/dev/mapper/cryptroot "
+                                        f"rootflags=subvol=/ rw "
+                                        f"boot=UUID={uuids.get('BOOT_UUID', 'unknown')} "
+                                        f"composefs={composefs_hash} splash quiet"
+                                    )
+                                else:
+                                    # Use root UUID instead of device path for non-encrypted installations
+                                    new_options = (
+                                        f"options root=UUID={root_uuid} "
+                                        f"rootflags=subvol=/ rw "
+                                        f"boot=UUID={uuids.get('BOOT_UUID', 'unknown')} "
+                                        f"composefs={composefs_hash} splash quiet"
+                                    )
+                                modified_lines.append(new_options)
+                                log_command_output(f"Modified options line: {new_options}")
+                            else:
+                                modified_lines.append(line)
+                        
+                        # Write the modified content back
+                        modified_content = '\n'.join(modified_lines) + '\n'
+                        cmd = ["sudo", "tee", boot_entry]
+                        log_command_output(f"Command: {' '.join(cmd)}")
+                        result = subprocess.run(cmd, input=modified_content, check=True, capture_output=True, text=True)
+                        log_command_output(f"Return code: {result.returncode}")
+                        if result.stdout:
+                            log_command_output(f"Stdout: {result.stdout}")
+                        if result.stderr:
+                            log_command_output(f"Stderr: {result.stderr}")
+                            
+                    except Exception as e:
+                        logger.warning("Failed to configure boot entries: %s", e)
+                        log_command_output(f"ERROR: Failed to configure boot entries: {e}")
             except Exception as e:
                 logger.error("Error during disk operation %s: %s", operation, e)
                 log_command_output(f"ERROR during operation {operation}: {e}")
@@ -575,5 +660,7 @@ class Processor:
         
         # Call completion callback if set - schedule on main thread
         if Processor.__completion_callback:
+            stop_sudo_keepalive.set()
+            keepalive_thread.join(timeout=1)
             logger.info("Scheduling completion callback on main thread with success=%s", success)
             GLib.idle_add(Processor.__completion_callback, success)
