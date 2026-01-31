@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="data/icons/hicolor/scalable/apps/org.vanillaos.Installer.svg" height="64">
+    <img src="data/icons/hicolor/scalable/apps/org.projectbluefin.dakoinstaller.svg" height="64">
     <h1>Dakota OS Installer</h1>
     <p>Adwaita installer for ProjectBluefin's Dakoratpor.</p>
     <hr />

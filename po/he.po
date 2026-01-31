@@ -19,20 +19,20 @@ msgstr ""
 "n % 10 == 0) ? 2 : 3));\n"
 "X-Generator: Weblate 5.0-dev\n"
 
-#: data/org.vanillaos.Installer.desktop.in:3 vanilla_installer/gtk/window.ui:8
+#: data/org.projectbluefin.dakoinstaller.desktop.in:3 vanilla_installer/gtk/window.ui:8
 msgid "Vanilla OS Installer"
 msgstr ""
 
-#: data/org.vanillaos.Installer.appdata.xml.in:7
+#: data/org.projectbluefin.dakoinstaller.appdata.xml.in:7
 #, fuzzy
 msgid "Tweak your Vanilla OS installation."
 msgstr "הגדר את ההתקנה של מערכת ונילה."
 
-#: data/org.vanillaos.Installer.appdata.xml.in:10
+#: data/org.projectbluefin.dakoinstaller.appdata.xml.in:10
 msgid "No description"
 msgstr "אין תיאור"
 
-#: data/org.vanillaos.Installer.appdata.xml.in:26
+#: data/org.projectbluefin.dakoinstaller.appdata.xml.in:26
 #, fuzzy
 msgid "First release"
 msgstr "הוצאה ראשונה"

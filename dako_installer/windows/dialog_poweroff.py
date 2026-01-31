@@ -22,7 +22,7 @@ from dako_installer.core.system import Systeminfo
 from gi.repository import Adw, GLib, Gtk
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/dialog-poweroff.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/dialog-poweroff.ui")
 class VanillaPoweroffDialog(Adw.Window):
     __gtype_name__ = "VanillaPoweroffDialog"
 

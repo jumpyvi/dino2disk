@@ -20,19 +20,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.18-dev\n"
 
-#: data/org.vanillaos.Installer.desktop.in:3 vanilla_installer/gtk/window.ui:8
+#: data/org.projectbluefin.dakoinstaller.desktop.in:3 vanilla_installer/gtk/window.ui:8
 msgid "Vanilla OS Installer"
 msgstr "Vanilla OS-Installatør"
 
-#: data/org.vanillaos.Installer.appdata.xml.in:7
+#: data/org.projectbluefin.dakoinstaller.appdata.xml.in:7
 msgid "Tweak your Vanilla OS installation."
 msgstr "Justér din Vanilla OS-installation."
 
-#: data/org.vanillaos.Installer.appdata.xml.in:10
+#: data/org.projectbluefin.dakoinstaller.appdata.xml.in:10
 msgid "No description"
 msgstr "Ingen beskrivelse"
 
-#: data/org.vanillaos.Installer.appdata.xml.in:26
+#: data/org.projectbluefin.dakoinstaller.appdata.xml.in:26
 msgid "First release"
 msgstr "Første udgivelse"
 

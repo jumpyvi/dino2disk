@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
-	<id>org.vanillaos.Installer.desktop</id>
+	<id>org.projectbluefin.dakoinstaller.desktop</id>
 	<metadata_license>CC0-1.0</metadata_license>
     <project_license>GPL-3.0-only</project_license>
     <name translatable="no">Vanilla OS Installer</name>
@@ -10,7 +10,7 @@
 	  <p>No description</p>
 	</description>
     <screenshots></screenshots>
-    <translation type="gettext">org.vanillaos.Installer</translation>
+    <translation type="gettext">org.projectbluefin.dakoinstaller</translation>
     <content_rating type="oars-1.1"/>
     <recommends>
       <control>pointing</control>

@@ -21,6 +21,15 @@
                     <property name="visible">False</property>
                   </object>
                 </property>
+                <child>
+                  <object class="GtkButton" id="btn_about">
+                    <property name="icon-name">help-about-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">About</property>
+                    <style>
+                      <class name="flat"/>
+                    </style>
+                  </object>
+                </child>
               </object>
             </child>
             <property name="content">

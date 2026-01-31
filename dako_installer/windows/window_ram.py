@@ -21,7 +21,7 @@ from gi.repository import Adw, Gtk
 from dako_installer.utils.recipe import RecipeLoader
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/window-ram.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/window-ram.ui")
 class VanillaRamWindow(Adw.Window):
     __gtype_name__ = "VanillaRamWindow"
 

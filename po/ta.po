@@ -18,19 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.4-dev\n"
 
-#: data/org.vanillaos.Installer.desktop.in:3 vanilla_installer/gtk/window.ui:8
+#: data/org.projectbluefin.dakoinstaller.desktop.in:3 vanilla_installer/gtk/window.ui:8
 msgid "Vanilla OS Installer"
 msgstr "வெண்ணிலா OS நிறுவி"
 
-#: data/org.vanillaos.Installer.appdata.xml.in:7
+#: data/org.projectbluefin.dakoinstaller.appdata.xml.in:7
 msgid "Tweak your Vanilla OS installation."
 msgstr "உங்கள் வெண்ணிலா OS நிறுவலை மாற்றி அமையுங்கள்."
 
-#: data/org.vanillaos.Installer.appdata.xml.in:10
+#: data/org.projectbluefin.dakoinstaller.appdata.xml.in:10
 msgid "No description"
 msgstr "விளக்கம் இல்லை"
 
-#: data/org.vanillaos.Installer.appdata.xml.in:26
+#: data/org.projectbluefin.dakoinstaller.appdata.xml.in:26
 msgid "First release"
 msgstr "முதல் வெளியீடு"
 

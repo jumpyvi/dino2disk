@@ -20,19 +20,19 @@ msgstr ""
 "|| n % 10 == 6 || n % 10 == 9);\n"
 "X-Generator: Weblate 4.15-dev\n"
 
-#: data/org.vanillaos.Installer.desktop.in:3 vanilla_installer/gtk/window.ui:8
+#: data/org.projectbluefin.dakoinstaller.desktop.in:3 vanilla_installer/gtk/window.ui:8
 msgid "Vanilla OS Installer"
 msgstr "Vanilla OS Installer"
 
-#: data/org.vanillaos.Installer.appdata.xml.in:7
+#: data/org.projectbluefin.dakoinstaller.appdata.xml.in:7
 msgid "Tweak your Vanilla OS installation."
 msgstr "Kalikutin ang iyong installer ng Vanilla OS."
 
-#: data/org.vanillaos.Installer.appdata.xml.in:10
+#: data/org.projectbluefin.dakoinstaller.appdata.xml.in:10
 msgid "No description"
 msgstr "Walang paglalarawan"
 
-#: data/org.vanillaos.Installer.appdata.xml.in:26
+#: data/org.projectbluefin.dakoinstaller.appdata.xml.in:26
 msgid "First release"
 msgstr "Unang ginawa"
 

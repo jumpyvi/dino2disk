@@ -21,7 +21,7 @@ from gi.repository import Adw, Gtk
 from dako_installer.utils.recipe import RecipeLoader
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/window-cpu.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/window-cpu.ui")
 class VanillaCpuWindow(Adw.Window):
     __gtype_name__ = "VanillaCpuWindow"
 

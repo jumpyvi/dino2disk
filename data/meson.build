@@ -19,13 +19,13 @@ install_data(
 )
 
 install_data(
-    'org.vanillaos.Installer.policy',
+    'org.projectbluefin.dakoinstaller.policy',
     install_dir: join_paths(get_option('datadir'), 'polkit-1', 'actions')
 )
 
 desktop_file = i18n.merge_file(
-  input: 'org.vanillaos.Installer.desktop.in',
-  output: 'org.vanillaos.Installer.desktop',
+  input: 'org.projectbluefin.dakoinstaller.desktop.in',
+  output: 'org.projectbluefin.dakoinstaller.desktop',
   type: 'desktop',
   po_dir: '../po',
   install: true,
@@ -40,8 +40,8 @@ if desktop_utils.found()
 endif
 
 appstream_file = i18n.merge_file(
-  input: 'org.vanillaos.Installer.appdata.xml.in',
-  output: 'org.vanillaos.Installer.appdata.xml',
+  input: 'org.projectbluefin.dakoinstaller.appdata.xml.in',
+  output: 'org.projectbluefin.dakoinstaller.appdata.xml',
   po_dir: '../po',
   install: true,
   install_dir: join_paths(get_option('datadir'), 'appdata')
@@ -54,7 +54,7 @@ if appstream_util.found()
   )
 endif
 
-install_data('org.vanillaos.Installer.gschema.xml',
+install_data('org.projectbluefin.dakoinstaller.gschema.xml',
   install_dir: join_paths(get_option('datadir'), 'glib-2.0/schemas')
 )
 

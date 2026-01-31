@@ -17,7 +17,7 @@
 from gi.repository import Gio, Gtk
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/default-theme.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/default-theme.ui")
 class VanillaDefaultTheme(Gtk.Box):
     __gtype_name__ = "VanillaDefaultTheme"
 

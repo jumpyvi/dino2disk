@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Dako Stall Installer
 Exec=dako-installer
-Icon=org.vanillaos.Installer
+Icon=org.projectbluefin.dakoinstaller
 Terminal=false
 Type=Application
 Categories=GTK;

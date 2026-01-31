@@ -19,7 +19,7 @@ from gettext import gettext as _
 from gi.repository import Adw, GObject, Gtk
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/dialog-output.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/dialog-output.ui")
 class VanillaDialogOutput(Adw.Window):
     __gtype_name__ = "VanillaDialogOutput"
 

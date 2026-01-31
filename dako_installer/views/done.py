@@ -22,14 +22,13 @@ from gi.repository import Adw, Gtk
 from dako_installer.windows.dialog_output import VanillaDialogOutput
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/done.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/done.ui")
 class VanillaDone(Adw.Bin):
     __gtype_name__ = "VanillaDone"
 
     status_page = Gtk.Template.Child()
     btn_reboot = Gtk.Template.Child()
     btn_close = Gtk.Template.Child()
-    btn_log = Gtk.Template.Child()
 
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
@@ -45,10 +44,7 @@ class VanillaDone(Adw.Bin):
 
         self.btn_reboot.connect("clicked", self.__on_reboot_clicked)
         self.btn_close.connect("clicked", self.__on_close_clicked)
-        self.btn_log.connect("clicked", self.__on_log_clicked)
-
-    def set_result(self, result, terminal):
-        self.__terminal = terminal
+    def set_result(self, result):
 
         if not result:
             self.status_page.set_icon_name("dialog-error-symbolic")
@@ -64,8 +60,3 @@ class VanillaDone(Adw.Bin):
 
     def __on_close_clicked(self, button):
         self.__window.close()
-
-    def __on_log_clicked(self, button):
-        if self.__terminal:
-            dialog = VanillaDialogOutput(self.__window, self.__terminal)
-            dialog.present()

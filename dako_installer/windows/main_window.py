@@ -19,6 +19,7 @@
 import json
 import logging
 import os
+import subprocess
 
 from gi.repository import Adw, Gtk
 
@@ -31,13 +32,14 @@ from dako_installer.views.progress import VanillaProgress
 logger = logging.getLogger("Installer::Window")
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/window.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/window.ui")
 class VanillaWindow(Adw.ApplicationWindow):
     __gtype_name__ = "VanillaWindow"
 
     carousel = Gtk.Template.Child()
     carousel_indicator_dots = Gtk.Template.Child()
     btn_back = Gtk.Template.Child()
+    btn_about = Gtk.Template.Child()
     toasts = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
@@ -63,6 +65,7 @@ class VanillaWindow(Adw.ApplicationWindow):
 
     def __connect_signals(self):
         self.btn_back.connect("clicked", self.back)
+        self.btn_about.connect("clicked", self.show_about)
         self.carousel.connect("page-changed", self.__on_page_changed)
         self.__builder.widgets[-1][0].btn_next.connect("clicked", self.update_finals)
         self.__view_confirm.connect("installation-confirmed", self.on_installation_confirmed)
@@ -187,5 +190,53 @@ class VanillaWindow(Adw.ApplicationWindow):
         toast.props.timeout = timeout
         self.toasts.add_toast(toast)
 
-    def set_installation_result(self, result, terminal):
-        self.__view_done.set_result(result, terminal)
+    def show_about(self, *args):
+        """About dialog."""
+        about = Adw.AboutWindow(transient_for=self)
+        about.set_application_name("Dakota Installer")
+        about.set_version(f"Commit version: {self._git_ref()}")
+        about.set_developer_name("Project Bluefin")
+        about.set_website("https://projectbluefin.io/")
+        about.add_credit_section("Contributors", [
+            "The Bluefin team and community",
+            "jumpyvi",
+        ])
+        about.add_credit_section("Artists", [
+            "Delphic Melody",
+            "Quince",
+        ])
+        about.add_acknowledgement_section(
+            ("Installer forked from:"),
+            [
+                "The VanillaOS project https://github.com/Vanilla-OS",
+            ],
+        )
+        about.add_acknowledgement_section(
+            ("Possible with:"),
+            [
+                "The GnomeOS project https://os.gnome.org/",
+                "The BootC project  https://bootc-dev.github.io/"
+            ],
+        )
+        about.set_issue_url("https://github.com/projectbluefin/dakota/issues")
+
+        about.present()
+
+    def _git_ref(self) -> str:
+        """Return a version string for the installer.
+        """
+        try:
+            ref = subprocess.check_output(
+                ["git", "rev-parse", "--short", "HEAD"],
+                cwd=".",
+                stderr=subprocess.DEVNULL,
+            )
+            return ref.decode().strip()
+        except Exception as e:
+            print(f"DEBUG: Git command failed due to: {e}")
+            if hasattr(e, 'stderr') and e.stderr:
+                print(f"Git error output: {e.stderr.decode()}")
+            return "unversioned"
+
+    def set_installation_result(self, result):
+        self.__view_done.set_result(result)

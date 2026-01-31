@@ -27,8 +27,6 @@ from dako_installer.defaults.image import VanillaDefaultImage
 from dako_installer.defaults.keyboard import VanillaDefaultKeyboard
 from dako_installer.defaults.language import VanillaDefaultLanguage
 from dako_installer.defaults.network import VanillaDefaultNetwork
-from dako_installer.defaults.nvidia import VanillaDefaultNvidia
-from dako_installer.defaults.vm import VanillaDefaultVm
 from dako_installer.defaults.timezone import VanillaDefaultTimezone
 from dako_installer.defaults.welcome import VanillaDefaultWelcome
 from dako_installer.layouts.preferences import VanillaLayoutPreferences
@@ -39,22 +37,22 @@ logger = logging.getLogger("Installer::Builder")
 hardcoded_recipe = {
     "tour": {
         "welcome": {
-            "resource": "/org/vanillaos/Installer/assets/welcome.png",
+            "resource": "/org/projectbluefin/dakoinstaller/assets/welcome.png",
             "title": "Installing Dakota",
             "description": "The process could take a few minutes, please be patient"
         },
         "control": {
-            "resource": "/org/vanillaos/Installer/assets/ready.svg",
+            "resource": "/org/projectbluefin/dakoinstaller/assets/ready.svg",
             "title": "Always Ready",
             "description": "Don't be held back by your system, use it the way you want"
         },
         "containerized": {
-            "resource": "/org/vanillaos/Installer/assets/containerized.svg",
+            "resource": "/org/projectbluefin/dakoinstaller/assets/containerized.svg",
             "title": "Containerized",
             "description": "You never have to worry about breakage due to incompatible or conflicting packages"
         },
         "completed": {
-            "resource": "/org/vanillaos/Installer/assets/complete.svg",
+            "resource": "/org/projectbluefin/dakoinstaller/assets/complete.svg",
             "title": "Complete and Reliable",
             "description": "The largest software catalog at your fingertips"
         }
@@ -84,9 +82,6 @@ templates = {
     "preferences": VanillaLayoutPreferences,
     "disk": VanillaDefaultDisk,
     "encryption": VanillaDefaultEncryption,
-    "image": VanillaDefaultImage,
-    "nvidia": VanillaDefaultNvidia,
-    "vm": VanillaDefaultVm,
     "yes-no": VanillaLayoutYesNo,
 }
 

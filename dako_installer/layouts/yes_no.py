@@ -19,7 +19,7 @@ from gi.repository import Adw, Gtk
 from dako_installer.windows.dialog import VanillaDialog
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/layout-yes-no.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/layout-yes-no.ui")
 class VanillaLayoutYesNo(Adw.Bin):
     __gtype_name__ = "VanillaLayoutYesNo"
 

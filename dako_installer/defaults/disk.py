@@ -24,7 +24,7 @@ from dako_installer.core.disks import DisksManager, Diskutils, Partition
 from dako_installer.core.system import Systeminfo
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/widget-disk.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/widget-disk.ui")
 class VanillaDefaultDiskEntry(Adw.ActionRow):
     __gtype_name__ = "VanillaDefaultDiskEntry"
 
@@ -55,7 +55,7 @@ class VanillaDefaultDiskEntry(Adw.ActionRow):
         return self.__partition.disk_block
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/widget-partition-row.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/widget-partition-row.ui")
 class PartitionRow(Adw.ActionRow):
     __gtype_name__ = "PartitionRow"
 
@@ -139,7 +139,7 @@ class PartitionRow(Adw.ActionRow):
         self.__parent.set_subtitle(f"{size} ({fs_type})")
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/widget-partition.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/widget-partition.ui")
 class PartitionSelector(Adw.PreferencesPage):
     __gtype_name__ = "PartitionSelector"
 
@@ -479,7 +479,7 @@ class PartitionSelector(Adw.PreferencesPage):
         return self.__selected_partitions
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/dialog-disk.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/dialog-disk.ui")
 class VanillaDefaultDiskPartModal(Adw.Window):
     __gtype_name__ = "VanillaDefaultDiskPartModal"
     __gsignals__ = {
@@ -575,7 +575,7 @@ class VanillaDefaultDiskPartModal(Adw.Window):
         return recipe
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/dialog-disk-confirm.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/dialog-disk-confirm.ui")
 class VanillaDefaultDiskConfirmModal(Adw.Window):
     __gtype_name__ = "VanillaDefaultDiskConfirmModal"
 
@@ -657,7 +657,7 @@ class VanillaDefaultDiskConfirmModal(Adw.Window):
         self.destroy()
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/default-disk.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/default-disk.ui")
 class VanillaDefaultDisk(Adw.Bin):
     __gtype_name__ = "VanillaDefaultDisk"
 

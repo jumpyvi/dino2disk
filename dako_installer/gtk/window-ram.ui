@@ -16,7 +16,7 @@
             <property name="maximum-size">450</property>
             <child>
               <object class="GtkPicture">
-                <property name="file">resource:///org/vanillaos/Installer/assets/unsupported.svg</property>
+                <property name="file">resource:///org/projectbluefin/dakoinstaller/assets/unsupported.svg</property>
                 <property name="can-shrink">False</property>
               </object>
             </child>

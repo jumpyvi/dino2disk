@@ -19,7 +19,7 @@ from gi.repository import Adw, Gtk
 from dako_installer.core.languages import all_languages, current_language
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/widget-language.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/widget-language.ui")
 class LanguageRow(Adw.ActionRow):
     __gtype_name__ = "LanguageRow"
 
@@ -43,7 +43,7 @@ class LanguageRow(Adw.ActionRow):
         self.get_parent().emit("selected-rows-changed")
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/default-language.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/default-language.ui")
 class VanillaDefaultLanguage(Adw.Bin):
     __gtype_name__ = "VanillaDefaultLanguage"
 

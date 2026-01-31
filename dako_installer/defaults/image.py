@@ -18,7 +18,7 @@
 from gi.repository import Adw, Gtk
 import re
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/default-image.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/default-image.ui")
 class VanillaDefaultImage(Adw.Bin):
     __gtype_name__ = "VanillaDefaultImage"
 

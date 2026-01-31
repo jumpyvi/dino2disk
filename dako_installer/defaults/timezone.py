@@ -31,7 +31,7 @@ from dako_installer.core.timezones import (
 logger = logging.getLogger("VanillaInstaller::Timezone")
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/widget-timezone.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/widget-timezone.ui")
 class TimezoneRow(Adw.ActionRow):
     __gtype_name__ = "TimezoneRow"
 
@@ -56,7 +56,7 @@ class TimezoneRow(Adw.ActionRow):
         self.set_subtitle(f"{tz_time} • {tz_date}")
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/default-timezone.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/default-timezone.ui")
 class VanillaDefaultTimezone(Adw.Bin):
     __gtype_name__ = "VanillaDefaultTimezone"
 

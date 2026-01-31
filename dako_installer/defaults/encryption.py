@@ -17,7 +17,7 @@
 
 from gi.repository import Adw, Gtk
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/default-encryption.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/default-encryption.ui")
 class VanillaDefaultEncryption(Adw.Bin):
     __gtype_name__ = "VanillaDefaultEncryption"
 

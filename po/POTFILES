@@ -1,6 +1,6 @@
-data/org.vanillaos.Installer.desktop.in
-data/org.vanillaos.Installer.appdata.xml.in
-data/org.vanillaos.Installer.gschema.xml
+data/org.projectbluefin.dakoinstaller.desktop.in
+data/org.projectbluefin.dakoinstaller.appdata.xml.in
+data/org.projectbluefin.dakoinstaller.gschema.xml
 
 dako_installer/gtk/confirm.ui
 dako_installer/gtk/default-conn-check.ui
@@ -10,11 +10,7 @@ dako_installer/gtk/default-keyboard.ui
 dako_installer/gtk/default-language.ui
 dako_installer/gtk/default-network.ui
 dako_installer/gtk/default-image.ui
-dako_installer/gtk/default-nvidia.ui
-dako_installer/gtk/default-vm.ui
-dako_installer/gtk/default-theme.ui
 dako_installer/gtk/default-timezone.ui
-dako_installer/gtk/default-users.ui
 dako_installer/gtk/default-welcome.ui
 dako_installer/gtk/dialog.ui
 dako_installer/gtk/dialog-disk.ui

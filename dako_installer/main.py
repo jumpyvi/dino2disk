@@ -47,7 +47,7 @@ class VanillaInstaller(Adw.Application):
 
     def __init__(self):
         super().__init__(
-            application_id="org.vanillaos.Installer",
+            application_id="org.projectbluefin.dakoinstaller",
             flags=Gio.ApplicationFlags.FLAGS_NONE,
         )
         self.create_action("quit", self.close, ["<primary>q"])

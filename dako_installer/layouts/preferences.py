@@ -21,7 +21,7 @@ from gi.repository import Adw, Gtk
 from dako_installer.windows.dialog import VanillaDialog
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/layout-preferences.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/layout-preferences.ui")
 class VanillaLayoutPreferences(Adw.Bin):
     __gtype_name__ = "VanillaLayoutPreferences"
 

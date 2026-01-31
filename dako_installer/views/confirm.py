@@ -20,7 +20,7 @@ from gettext import gettext as _
 from gi.repository import Adw, GObject, Gtk
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/widget-choice.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/widget-choice.ui")
 class VanillaChoiceEntry(Adw.ActionRow):
     __gtype_name__ = "VanillaChoiceEntry"
 
@@ -33,7 +33,7 @@ class VanillaChoiceEntry(Adw.ActionRow):
         self.img_choice.set_from_icon_name(icon_name)
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/widget-choice-expander.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/widget-choice-expander.ui")
 class VanillaChoiceExpanderEntry(Adw.ExpanderRow):
     __gtype_name__ = "VanillaChoiceExpanderEntry"
 
@@ -46,7 +46,7 @@ class VanillaChoiceExpanderEntry(Adw.ExpanderRow):
         self.img_choice.set_from_icon_name(icon_name)
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/confirm.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/confirm.ui")
 class VanillaConfirm(Adw.Bin):
     __gtype_name__ = "VanillaConfirm"
     __gsignals__ = {

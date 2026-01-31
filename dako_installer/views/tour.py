@@ -21,7 +21,7 @@ from gettext import gettext as _
 from gi.repository import Adw, Gtk
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/tour.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/tour.ui")
 class VanillaTour(Adw.Bin):
     __gtype_name__ = "VanillaTour"
 

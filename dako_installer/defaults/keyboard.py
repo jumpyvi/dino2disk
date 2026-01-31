@@ -23,7 +23,7 @@ from gi.repository import Adw, Gio, GLib, Gtk
 
 from dako_installer.core.keymaps import KeyMaps
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/widget-keyboard.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/widget-keyboard.ui")
 class KeyboardRow(Adw.ActionRow):
     __gtype_name__ = "KeyboardRow"
 
@@ -57,7 +57,7 @@ class KeyboardRow(Adw.ActionRow):
 
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/default-keyboard.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/default-keyboard.ui")
 class VanillaDefaultKeyboard(Adw.Bin):
     __gtype_name__ = "VanillaDefaultKeyboard"
 

@@ -23,7 +23,7 @@ from dako_installer.utils.run_async import RunAsync
 from dako_installer.views.tour import VanillaTour
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/progress.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/progress.ui")
 class VanillaProgress(Gtk.Box):
     __gtype_name__ = "VanillaProgress"
 
@@ -175,7 +175,7 @@ class VanillaProgress(Gtk.Box):
         # Terminal applications return 0 on success and 1 on failure, so we need
         # to invert the status to get the correct result.
         status = not bool(status)
-        self.__window.set_installation_result(status, self.__terminal)
+        self.__window.set_installation_result(status)
 
     def start(self, recipe):
         # If VANILLA_FAKE was passed as argument

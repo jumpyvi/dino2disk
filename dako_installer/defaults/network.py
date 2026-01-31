@@ -55,7 +55,7 @@ NM_802_11_AP_SEC_KEY_MGMT_PSK = 0x00000100
 NM_802_11_AP_SEC_KEY_MGMT_SAE = 0x00000400
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/wireless-row.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/wireless-row.ui")
 class WirelessRow(Adw.ActionRow):
     __gtype_name__ = "WirelessRow"
 
@@ -245,7 +245,7 @@ class WirelessRow(Adw.ActionRow):
     #     return connection
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/default-network.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/default-network.ui")
 class VanillaDefaultNetwork(Adw.Bin):
     __gtype_name__ = "VanillaDefaultNetwork"
 

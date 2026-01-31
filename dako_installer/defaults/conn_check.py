@@ -28,7 +28,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("VanillaInstaller::Conn_Check")
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/default-conn-check.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/default-conn-check.ui")
 class VanillaDefaultConnCheck(Adw.Bin):
     __gtype_name__ = "VanillaDefaultConnCheck"
 

@@ -20,7 +20,7 @@ from dako_installer.windows.dialog_recovery import VanillaRecoveryDialog
 from dako_installer.windows.dialog_poweroff import VanillaPoweroffDialog
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/default-welcome.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/default-welcome.ui")
 class VanillaDefaultWelcome(Adw.Bin):
     __gtype_name__ = "VanillaDefaultWelcome"
 

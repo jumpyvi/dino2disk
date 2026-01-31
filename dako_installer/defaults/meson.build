@@ -10,8 +10,6 @@ sources = [
   'disk.py',
   'encryption.py',
   'image.py',
-  'nvidia.py',
-  'vm.py',
   'conn_check.py',
   'network.py',
 ]

@@ -20,7 +20,7 @@ from gettext import gettext as _
 from gi.repository import Adw, GLib, Gtk
 
 
-@Gtk.Template(resource_path="/org/vanillaos/Installer/gtk/dialog-recovery.ui")
+@Gtk.Template(resource_path="/org/projectbluefin/dakoinstaller/gtk/dialog-recovery.ui")
 class VanillaRecoveryDialog(Adw.Window):
     __gtype_name__ = "VanillaRecoveryDialog"
 
