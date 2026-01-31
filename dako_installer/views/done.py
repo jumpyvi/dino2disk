@@ -50,7 +50,7 @@ class VanillaDone(Adw.Bin):
             self.status_page.set_icon_name("dialog-error-symbolic")
             self.status_page.set_title(_("Something went wrong"))
             self.status_page.set_description(
-                _("Please contact the distribution developers.")
+                _("Please create an issue, contact the developers or check /tmp/dako.log.")
             )
             self.btn_reboot.set_visible(False)
             self.btn_close.set_visible(True)

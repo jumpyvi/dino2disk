@@ -151,7 +151,8 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.__view_progress.start(recipe)
         self.next()
 
-    def __go_to_done_page(self, *args):
+    def __go_to_done_page(self, success=True, *args):
+        self.__view_done.set_result(success)
         self.carousel.scroll_to(self.__view_done, True)
 
     def next(self, widget=None, fn=None, *args):

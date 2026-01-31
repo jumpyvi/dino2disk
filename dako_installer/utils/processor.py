@@ -79,11 +79,6 @@ class Processor:
         Processor.__completion_callback = callback
 
     @staticmethod
-    def set_log_callback(callback):
-        """Set callback to be called for each log message."""
-        _cb_handler.set_callback(callback)
-
-    @staticmethod
     def __gen_simple_partition_steps(
         disk: str,
         encrypt: bool,
@@ -125,7 +120,7 @@ class Processor:
         # Mount filesystems
         mount_point = "/var/mnt"
         setup_steps.append([disk, "mount", [root_mapper, mount_point, False]])
-        setup_steps.append([disk, "mount", [boot_partition, f"{mount_point}/boot", True]])
+        setup_steps.append([disk, "mount", [boot_partition, f"{mount_point}/boot/efi", True]])
 
         # Get UUIDs
         setup_steps.append([disk, "get-uuids", [boot_partition, root_partition]])
@@ -147,7 +142,7 @@ class Processor:
 
         # Mountpoints
         mountpoints.append([root_mapper, "/"])
-        mountpoints.append([boot_partition, "/boot"])
+        mountpoints.append([boot_partition, "/boot/efi"])
 
         return setup_steps, mountpoints, boot_partition, root_partition
 
@@ -382,7 +377,6 @@ class Processor:
                     log_command_output(f"Return code: {result.returncode}")
                     log_command_output(f"LUKS UUID: {uuids['LUKS_UUID']}")
                     
-                    logger.info("Boot UUID: %s, LUKS UUID: %s", uuids["BOOT_UUID"], uuids["LUKS_UUID"])
                     
                 elif operation == "bootc-install":
                     mount_point, root_name = params
@@ -431,7 +425,7 @@ class Processor:
                     if result.stderr:
                         log_command_output(f"Stderr: {result.stderr}")
                     
-                    cmd2 = ["sudo", "mount", "-o", "remount,rw", f"{mount_point}/boot"]
+                    cmd2 = ["sudo", "mount", "-o", "remount,rw", f"{mount_point}/boot/efi"]
                     log_command_output(f"Command: {' '.join(cmd2)}")
                     result = subprocess.run(cmd2, check=True, capture_output=True, text=True)
                     log_command_output(f"Return code: {result.returncode}")
