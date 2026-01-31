@@ -71,6 +71,8 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.__view_confirm.connect("installation-confirmed", self.on_installation_confirmed)
 
     def rebuild_ui(self, mode=1):
+        if self.install_mode == mode:
+            return
         self.install_mode = mode
         self.__build_ui(True, mode)
 
@@ -88,13 +90,16 @@ class VanillaWindow(Adw.ApplicationWindow):
                     if "protected" in step_props:
                         continue
                     else:
-                        self.carousel.remove(widget)
+                        if widget.get_parent() == self.carousel:
+                            self.carousel.remove(widget)
                 if "custom_image" in step_props and mode == 0:
                     continue
                 if "default_image" in step_props and mode == 1:
                     continue
-                logger.info("(%s) Adding widget to carousel", widget.__gtype_name__)
-                self.carousel.append(widget)
+                
+                if widget.get_parent() != self.carousel:
+                    logger.info("(%s) Adding widget to carousel", widget.__gtype_name__)
+                    self.carousel.append(widget)
         else:
             self.__on_page_changed()
 
@@ -102,17 +107,16 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.carousel.append(self.__view_progress)
         self.carousel.append(self.__view_done)
 
-    def __on_page_changed(self, *args):
-        cur_index = self.carousel.get_position()
-        page = self.carousel.get_nth_page(cur_index)
+    def __on_page_changed(self, carousel, index, *args):
+        page = self.carousel.get_nth_page(index)
 
-        logger.info("(%s) Page is changing...", page.__gtype_name__)
+        logger.info("(%s) Page is changing to index %d", page.__gtype_name__, index)
 
         if page not in [self.__view_progress, self.__view_done]:
             logger.info("(%s) It is not a final page", page.__gtype_name__)
-            self.btn_back.set_visible(cur_index != 0.0)
-            self.btn_back.set_sensitive(cur_index != 0.0)
-            self.carousel_indicator_dots.set_visible(cur_index != 0.0)
+            self.btn_back.set_visible(index != 0)
+            self.btn_back.set_sensitive(index != 0)
+            self.carousel_indicator_dots.set_visible(index != 0)
             return
 
         logger.info("(%s) It is a final page", page.__gtype_name__)
@@ -153,37 +157,62 @@ class VanillaWindow(Adw.ApplicationWindow):
     def next(self, widget=None, fn=None, *args):
         logger.info("Going to next page")
 
-        cur_index = self.carousel.get_position()
+        cur_pos = self.carousel.get_position()
+        cur_index = int(round(cur_pos))
+        n_pages = self.carousel.get_n_pages()
+        
+        logger.info(f"Current position: {cur_pos}, index: {cur_index}, total pages: {n_pages}")
+
+        if cur_index >= n_pages:
+            logger.warning("Already at the last page or index out of bounds")
+            return
+
         page = self.carousel.get_nth_page(cur_index)
         if page.delta:
-            logger.info(f"Removing deltas of page {int(cur_index)}")
+            logger.info(f"Removing deltas of page {cur_index}")
             page.del_deltas()
-        logger.info(f"Next page is {int(cur_index + 1)}")
+        
+        next_index = cur_index + 1
+        if next_index >= n_pages:
+            logger.warning("No next page to scroll to")
+            return
+
+        logger.info(f"Next page is {next_index}")
 
         if fn is not None:
             logger.info("Executing page's custom function")
             fn()
             logger.info("Finished executing page's custom function")
 
-        page = self.carousel.get_nth_page(cur_index + 1)
-        self.carousel.scroll_to(page, True)
-        if page.delta:
-            logger.info(f"Generating deltas of page {int(cur_index + 1)}")
-            page.gen_deltas()
+        next_page = self.carousel.get_nth_page(next_index)
+        self.carousel.scroll_to(next_page, True)
+        if next_page.delta:
+            logger.info(f"Generating deltas of page {next_index}")
+            next_page.gen_deltas()
 
     def back(self, *args):
         logger.info("Going to previous page")
 
-        cur_index = self.carousel.get_position()
+        cur_pos = self.carousel.get_position()
+        cur_index = int(round(cur_pos))
+        
+        logger.info(f"Current position: {cur_pos}, index: {cur_index}")
+
+        if cur_index <= 0:
+            logger.warning("Already at the first page")
+            return
+
         page = self.carousel.get_nth_page(cur_index)
         if page.delta:
             page.del_deltas()
-        logger.info(f"Previous page is {int(cur_index - 1)}")
+        
+        prev_index = cur_index - 1
+        logger.info(f"Previous page is {prev_index}")
 
-        page = self.carousel.get_nth_page(cur_index - 1)
-        self.carousel.scroll_to(page, True)
-        if page.delta:
-            page.gen_deltas()
+        prev_page = self.carousel.get_nth_page(prev_index)
+        self.carousel.scroll_to(prev_page, True)
+        if prev_page.delta:
+            prev_page.gen_deltas()
 
     def toast(self, message, timeout=3):
         toast = Adw.Toast.new(message)

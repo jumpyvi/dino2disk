@@ -62,6 +62,9 @@ hardcoded_recipe = {
             "template": "welcome",
             "protected": True
         },
+        "network": {
+            "template": "network",
+        },
         "image": {
             "template": "image",
             "custom_image": True
@@ -101,9 +104,6 @@ class Builder:
         self.__load()
 
     def __load(self):
-        if "VANILLA_FAKE" in os.environ:
-            logger.info("VANILLA_FAKE is set, skipping the installation process.")
-
         self.__window.recipe = self.recipe
 
         log_path = "/tmp/dako.log"

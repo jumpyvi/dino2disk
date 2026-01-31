@@ -157,7 +157,6 @@ class Processor:
         logger.info("processing the following final data: %s", finals)
 
         recipe = BootcRecipe()
-        # image = "ghcr.io/projectbluefin/dakota" # Removed hardcoded image
 
         # Setup encryption if user selected it
         encrypt = False

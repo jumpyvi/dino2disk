@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Adw, Gtk
+from gi.repository import Adw, Gtk, GLib
 
 from dako_installer.windows.dialog_recovery import VanillaRecoveryDialog
 from dako_installer.windows.dialog_poweroff import VanillaPoweroffDialog
@@ -58,11 +58,5 @@ class VanillaDefaultWelcome(Adw.Bin):
         VanillaPoweroffDialog(self.__window).show()
 
     def __install(self, _):
-        if self.__window.install_mode == 0:
-            self.__window.rebuild_ui(1)
-        self.__window.next()
-
-    def __install_custom(self, _):
-        if self.__window.install_mode == 0:
-            self.__window.rebuild_ui()
-        self.__window.next()
+        self.__window.rebuild_ui()
+        GLib.timeout_add(200, self.__window.next)
