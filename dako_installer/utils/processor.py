@@ -313,7 +313,7 @@ class Processor:
                         log_command_output(f"Stderr: {result.stderr}")
                     
                 elif operation == "cryptsetup-format":
-                    cmd = ["sudo", "cryptsetup", "luksFormat", "--type", "luks2"] + params
+                    cmd = ["sudo", "cryptsetup", "luksFormat", "--type", "luks2", "--force-password"] + params
                     logger.info("Executing cryptsetup luksFormat")
                     log_command_output(f"OPERATION: cryptsetup-format")
                     log_command_output(f"Command: {' '.join(cmd)}")
